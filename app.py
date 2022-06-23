@@ -1,4 +1,3 @@
-import service
 from flask import Flask, request
 from importer_service import ImporterService
 import json
