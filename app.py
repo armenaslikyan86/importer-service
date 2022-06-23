@@ -1,6 +1,5 @@
-from flask import Flask, request
+from flask import Flask, request, json
 from importer_service import ImporterService
-import json
 
 app = Flask(__name__)
 importerService = ImporterService();
@@ -11,9 +10,10 @@ importerService = ImporterService();
 def home():
     return 'Importer service is running!'
 
-@app.route('/api/tasks')
-def get_tasks():
-    return importerService.get_tasks()
+@app.route('/api/layers', methods=['GET'])
+def get_layers():
+    data = importerService.get_layers()
+    return app.response_class(data, mimetype='application/json')
 
 
 if __name__ == '__main__':

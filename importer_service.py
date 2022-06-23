@@ -1,28 +1,16 @@
-import json
+from psd_tools import PSDImage
+from flask import json
 
 class ImporterService:
 
-    tasks = [
-        {
-            'id': 1,
-            'name': "task1",
-            "description": "This is task 1"
-        },
-        {
-            "id": 2,
-            "name": "task2",
-            "description": "This is task 2"
-        },
-        {
-            "id": 3,
-            "name": "task3",
-            "description": "This is task 3"
-        }
-    ]
-
     def __init__(self):
-        self.tasksJSON = json.dumps(self.tasks)
+        self.psd = PSDImage.open('rich-text.psd')
+        self.psd.composite().save('rich-text.png')
 
-    def get_tasks(self):
-        return self.tasksJSON
+    def get_layers(self):
+        data = {}
+        for layer in self.psd:
+            data[json.dumps(layer.__repr__())] = json.dumps(layer.composite().__repr__())
+        return data
+
 
