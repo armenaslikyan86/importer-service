@@ -33,7 +33,7 @@ DOCKER_FILE_PATH=Dockerfile
 
 build: docker-build do-push
 
-docker-build:
+docker-build: .release
 	docker build $(DOCKER_BUILD_ARGS) -t $(IMAGE):$(VERSION) $(DOCKER_BUILD_CONTEXT) -f $(DOCKER_FILE_PATH)
 	@DOCKER_MAJOR=$(shell docker -v | sed -e 's/.*version //' -e 's/,.*//' | cut -d\. -f1) ; \
 	DOCKER_MINOR=$(shell docker -v | sed -e 's/.*version //' -e 's/,.*//' | cut -d\. -f2) ; \
@@ -44,6 +44,12 @@ docker-build:
 		echo docker tag $(IMAGE):$(VERSION) $(IMAGE):latest ;\
 		docker tag $(IMAGE):$(VERSION) $(IMAGE):latest ; \
 	fi
+
+.release:
+	@echo "release=0.0.0" > .release
+	@echo "tag=$(NAME)-0.0.0" >> .release
+	@echo INFO: .release created
+	@cat .release
 
 push: do-push
 
